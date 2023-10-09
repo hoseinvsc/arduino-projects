@@ -1,6 +1,6 @@
 #include <Arduino.h> 
 
-const int ledPin = 9; 
+int ledPin = 9; 
 int brightness = 0; 
 
 void setup() {
@@ -14,7 +14,6 @@ void loop() {
     analogWrite(ledPin, brightness); 
     delay(10); 
   }
-
   for (brightness = 255; 
     brightness >= 0; 
     brightness--) {
