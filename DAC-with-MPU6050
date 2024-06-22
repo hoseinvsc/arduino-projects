@@ -1,0 +1,56 @@
+#include <Wire.h>
+#include <LiquidCrystal.h>
+#include <MPU6050.h>
+
+MPU6050 mpu;
+LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
+
+int pwmPin = 9;
+float angle = 0;
+float voltage = 0;
+
+void setup() {
+  Wire.begin();
+  lcd.begin(16, 2);
+  Serial.begin(9600);
+  mpu.initialize();
+  if (!mpu.testConnection()) {
+    lcd.print("MPU6050 error");
+    while (1);
+  }
+
+  pinMode(pwmPin, OUTPUT);
+}
+
+void loop() {
+  int16_t ax, ay, az;
+  
+  mpu.getAcceleration(&ax, &ay, &az);
+  angle = atan2(ay, az) * 180 / PI;
+  if (angle < -90) angle = -90;
+  if (angle > 90) angle = 90;
+  float adjustedAngle = angle + 90;
+
+ (0-10V)
+  voltage = map(adjustedAngle, 0, 180, 0, 10);
+
+  int pwmValue = map(voltage, 0, 10, 0, 255);
+  analogWrite(pwmPin, pwmValue);
+
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print("Angle: ");
+  lcd.print(angle);
+  lcd.setCursor(0, 1);
+  lcd.print("Voltage: ");
+  lcd.print(voltage);
+
+  Serial.print("Angle: ");
+  Serial.print(angle);
+  Serial.print(" Adjusted Angle: ");
+  Serial.print(adjustedAngle);
+  Serial.print(" Voltage: ");
+  Serial.println(voltage);
+
+  delay(500);
+}
