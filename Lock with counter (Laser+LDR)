@@ -1,0 +1,33 @@
+#define laser 2
+#define sensor 3
+#define LED 4
+
+bool isFirstTime = true; // متغیر برای نگهداری وضعیت اولیه
+int count = 0; // شمارنده برای تعداد بارهایی که لیزر به فتوسل تابیده شده است
+
+void setup() {
+  Serial.begin(9600);
+  pinMode(laser, OUTPUT);
+  pinMode(sensor, INPUT);
+  pinMode(LED, OUTPUT);
+
+  digitalWrite(laser, HIGH);
+}
+
+void loop() {
+  bool value = digitalRead(sensor);
+
+  if (value == 0 && isFirstTime) {
+    // اگر بار اول است، LED را خاموش کنید و شمارنده را افزایش دهید
+    digitalWrite(LED, LOW);
+    count++;
+    isFirstTime = false; // تغییر وضعیت به false تا در بار دوم LED روشن شود
+  } else if (value == 1) {
+    isFirstTime = true; // اگر فتوسل خاموش شود، وضعیت اولیه را فعال کنید
+  }
+
+  if (count == 2) {
+    // اگر تعداد بارهای تابیدن لیزر به فتوسل دو شود، LED را روشن کنید
+    digitalWrite(LED, HIGH);
+  }
+}
