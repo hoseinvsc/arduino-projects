@@ -1,0 +1,79 @@
+#i
+include <SoftwareSerial.h>
+
+const byte rxPin = 2;
+const byte txPin = 3;
+
+SoftwareSerial HC05 (rxPin, txPin);
+
+String i;
+void setup() {
+  pinMode(13, OUTPUT);
+  pinMode(12, OUTPUT);
+  pinMode(11, OUTPUT);
+  HC05.begin(9600);
+  Serial.begin(9600);
+  pinMode(rxPin, INPUT);
+  pinMode(txPin, OUTPUT);
+}
+
+void loop() {
+  if (HC05.available() > 0) {
+    i = HC05.readString();
+    i.trim();
+    if (i.equalsIgnoreCase("red") ){  
+    digitalWrite(13, 1);
+    digitalWrite(12, 0);
+      digitalWrite(11, 0);
+      
+    }
+    if (i.equalsIgnoreCase("green") ) { 
+    digitalWrite(12, 1);
+    digitalWrite(13, 0);
+    digitalWrite(11, 0);
+    }
+    if (i.equalsIgnoreCase("blue") ) {
+    digitalWrite(11, 1);
+    digitalWrite(12, 0);
+    digitalWrite(13, 0);
+    }
+      
+    if (i.equalsIgnoreCase("ON")) {
+      digitalWrite(13, 1);
+      digitalWrite(12, 1);
+      digitalWrite(11, 1);
+      
+    }
+
+    if (i.equalsIgnoreCase("off")) {
+      digitalWrite(12, 0);
+      digitalWrite(13, 0);
+      digitalWrite(11, 0);
+      
+    }
+
+    if (i.equalsIgnoreCase("purple")) {
+      digitalWrite(12, 0);
+      digitalWrite(13, 1);
+      digitalWrite(11, 1);
+      
+    }
+
+    if (i.equalsIgnoreCase("yellow")) {
+      digitalWrite(12, 1);
+      digitalWrite(13, 1);
+      digitalWrite(11, 0);
+      
+    }
+
+        if (i.equalsIgnoreCase("light-blue")) {
+      digitalWrite(12, 1);
+      digitalWrite(13, 0);
+      digitalWrite(11, 1);
+      
+    }
+
+    Serial.println(i);
+  }
+
+}
